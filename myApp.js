@@ -27,8 +27,22 @@ const createAndSavePerson = (done) => {
   });
 };
 
+const arrayOfPeople = [
+  {'name': 'Isaac Asimov', 'age': 72, 'favoriteFoods': ['bacon', 'egg']},
+  {'name': 'Isaac Asimov Clone', 'age': -0, 'favoriteFoods': ['Uranium']}
+];
+
 const createManyPeople = (arrayOfPeople, done) => {
-  done(null /*, data*/);
+  for (const key in arrayOfPeople) {
+    const {name, age, favoriteFoods} = arrayOfPeople[key];
+    const currentPerson = new Person({name, age, favoriteFoods});
+    currentPerson.save((error, data) => {
+      if (error) {
+        return console.error(error);
+      }
+      done(null, data);
+    });
+  }
 };
 
 const findPeopleByName = (personName, done) => {
