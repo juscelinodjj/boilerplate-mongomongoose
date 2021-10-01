@@ -29,7 +29,9 @@ const createAndSavePerson = (done) => {
 
 const arrayOfPeople = [
   {'name': 'Isaac Asimov', 'age': 72, 'favoriteFoods': ['bacon', 'egg']},
-  {'name': 'Isaac Asimov Clone', 'age': -0, 'favoriteFoods': ['Uranium']}
+  {'name': 'Isaac Asimov Clone', 'age': -0, 'favoriteFoods': ['uranium']},
+  {'name': 'John Doe', 'age': 32, 'favoriteFoods': ['salad', 'fish']},
+  {'name': 'Jane Doe', 'age': 33, 'favoriteFoods': ['salad', 'fish', 'burrito']}
 ];
 
 const createManyPeople = (arrayOfPeople, done) => {
@@ -121,9 +123,18 @@ const removeManyPeople = (done) => {
 };
 
 const queryChain = (done) => {
-  const foodToSearch = "burrito";
-
-  done(null /*, data*/);
+  const foodToSearch = 'burrito';
+  Person.find({favoriteFoods : {$all: [foodToSearch]}})
+    .sort({name: 'asc'})
+    .limit(2)
+    .select('-age')
+    .exec((error, result) => {
+      if (error) {
+        return console.log(error);
+      }
+      done(null, result);
+    }
+  );
 };
 
 /** **Well Done !!**
